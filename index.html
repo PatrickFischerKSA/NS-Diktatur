@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Lerneinheit – Errichtung der NS-Diktatur</title>
+
+<style>
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background:#f2f2f2;
+  margin:0;
+  padding:20px;
+}
+h1, h2 {
+  color:#222;
+}
+.section {
+  background:#ffffff;
+  padding:20px;
+  margin-bottom:25px;
+  border-radius:6px;
+}
+ul {
+  line-height:1.6;
+}
+a {
+  color:#003399;
+  text-decoration:none;
+}
+a:hover {
+  text-decoration:underline;
+}
+textarea {
+  width:100%;
+  height:110px;
+}
+.question {
+  margin-bottom:30px;
+}
+.feedback {
+  margin-top:8px;
+  font-weight:bold;
+}
+.wrong { color:#b00000; }
+.hint { color:#b36b00; }
+.correct { color:#006600; }
+.solution {
+  display:none;
+  background:#eeeeee;
+  padding:10px;
+  margin-top:10px;
+}
+button {
+  padding:10px 16px;
+  margin-top:8px;
+}
+.controls {
+  margin-top:40px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Errichtung der NS-Diktatur in Deutschland (1933–1934)</h1>
+
+<div class="section">
+<h2>Materialien</h2>
+<ul>
+<li>🎬 <a href="https://www.dropbox.com/scl/fi/strqcxdtaoz7e0sdwivg4/Errichtung-der-NS-Diktatur-I-Nationalsozialismus-I-musstewissen-Geschichte.mp4" target="_blank">
+Errichtung der NS-Diktatur – mustewissen Geschichte</a></li>
+
+<li>🎬 <a href="https://www.dropbox.com/scl/fi/im7r4qiru6137da8u8wjw/1933-Machtergreifung-und-Unterdr-ckung.mp4" target="_blank">
+1933: Machtergreifung und Unterdrückung</a></li>
+
+<li>🎬 <a href="https://www.dropbox.com/scl/fi/j58gogbzt2nlxq0iqzvla/Doku-Hitlers-Macht-Der-Herrscher.mp4" target="_blank">
+Hitlers Macht – Der Herrscher</a></li>
+
+<li>📄 <a href="pdf/Nationalsozialismus_Buch_S106-125.pdf" target="_blank">
+Nationalsozialismus – Buch (S. 106–125)</a></li>
+
+<li>📄 <a href="pdf/Hitler_und_der_Nationalsozialismus.pdf" target="_blank">
+Hitler und der Nationalsozialismus</a></li>
+</ul>
+</div>
+
+<div class="section">
+<h2>Arbeitsauftrag</h2>
+<p>
+Bearbeite die folgenden Fragen <strong>materialgestützt</strong>.
+Achte insbesondere auf:
+</p>
+<ul>
+<li>Legale Machtausweitung vs. Terror</li>
+<li>Rolle von Propaganda und Zustimmung</li>
+<li>Ausschaltung politischer Gegner</li>
+<li>Bedeutung des Ermächtigungsgesetzes</li>
+<li>Zusammenspiel von Eliten, Partei und Bevölkerung</li>
+</ul>
+</div>
+
+<div class="section" id="quiz"></div>
+
+<div class="controls">
+<button onclick="submitQuiz()">Abgabe</button>
+<button onclick="resetQuiz()">Reset</button>
+<button onclick="exportPDF()">Export (PDF)</button>
+</div>
+
+<script>
+const questions = [
+{
+q:"Erläutere, weshalb Hitlers Ernennung zum Reichskanzler am 30. Januar 1933 noch keine Diktatur bedeutete.",
+hint:"Stichworte: Koalition, Weimarer Verfassung, formale Machtgrenzen.",
+solution:"Hitler war anfangs auf Koalitionspartner angewiesen, durch die Weimarer Verfassung gebunden und politisch nicht allmächtig. Erst durch gezielte Gesetzgebung, Terror und Ausschaltung der Opposition wurde die Demokratie zerstört."
+},
+{
+q:"Analysiere die politische Funktion des Reichstagsbrandes für den Machtausbau der NSDAP.",
+hint:"Welche rechtlichen Folgen hatte der Brand?",
+solution:"Der Reichstagsbrand diente als Vorwand zur Außerkraftsetzung der Grundrechte. Mit der Reichstagsbrandverordnung konnten politische Gegner verhaftet, verfolgt und ausgeschaltet werden."
+},
+{
+q:"Warum stellte das Ermächtigungsgesetz einen entscheidenden Wendepunkt dar?",
+hint:"Wer erliess danach Gesetze?",
+solution:"Das Ermächtigungsgesetz übertrug die Gesetzgebung vom Parlament auf die Regierung und hob die Gewaltenteilung faktisch auf. Es ermöglichte diktatorisches Regieren."
+},
+{
+q:"Beschreibe das Zusammenspiel von Legalität und Gewalt beim NS-Machtaufbau.",
+hint:"Vergleiche Gesetzgebung und SA/SS.",
+solution:"Die Nationalsozialisten nutzten legale Mittel wie Gesetze und Wahlen, kombinierten diese jedoch systematisch mit Gewalt, Terror und Einschüchterung."
+},
+{
+q:"Welche Rolle spielte Propaganda für Zustimmung und Stabilisierung des Regimes?",
+hint:"Rundfunk, Masseninszenierungen, Volksgemeinschaft.",
+solution:"Propaganda erzeugte emotionale Bindung, normalisierte Gewalt und vermittelte ein Bild von nationaler Einheit und Stärke."
+}
+];
+
+let attempts = [];
+
+const quizDiv = document.getElementById("quiz");
+
+questions.forEach((item, i) => {
+attempts[i] = 0;
+quizDiv.innerHTML += `
+<div class="question">
+<p><strong>Frage ${i+1}:</strong> ${item.q}</p>
+<textarea id="answer${i}"></textarea>
+<div id="feedback${i}" class="feedback"></div>
+<div id="solution${i}" class="solution"><strong>Musterlösung:</strong><br>${item.solution}</div>
+<button onclick="checkAnswer(${i})">Antwort prüfen</button>
+</div>
+`;
+});
+
+function checkAnswer(i) {
+attempts[i]++;
+const feedback = document.getElementById("feedback"+i);
+const solution = document.getElementById("solution"+i);
+
+if (attempts[i] === 1) {
+feedback.innerHTML = "Antwort falsch. Versuche es erneut.";
+feedback.className = "feedback wrong";
+}
+else if (attempts[i] === 2) {
+feedback.innerHTML = "Hinweis: " + questions[i].hint;
+feedback.className = "feedback hint";
+}
+else {
+solution.style.display = "block";
+feedback.innerHTML = "Musterlösung eingeblendet.";
+feedback.className = "feedback";
+}
+}
+
+function resetQuiz() {
+location.reload();
+}
+
+function submitQuiz() {
+alert("Abgabe gespeichert.");
+}
+
+function exportPDF() {
+window.print();
+}
+</script>
+
+</body>
+</html>
