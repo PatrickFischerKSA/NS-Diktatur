@@ -7,18 +7,62 @@
 <style>
 body {
   font-family: Arial, Helvetica, sans-serif;
-  /* ÄNDERUNG (einziger Eingriff): Hintergrundbild eingefügt + dunkle Überlagerung */
+  /* ÄNDERUNG (Hero-Update): Body wieder neutral/hell, damit der Arbeitsbereich lesbar bleibt */
+  background:#f2f2f2;
+  margin:0;
+  padding:0;
+}
+
+/* =========================================================
+   ÄNDERUNG (Hero-Update): Neuer Hero-Header mit Bild + Verlauf
+   (Bilddatei: reichsparteitag.jpg im gleichen Ordner wie diese HTML)
+   ========================================================= */
+.hero {
+  position: relative;
+  height: 320px;
   background:
-    linear-gradient(rgba(0,0,0,0.72), rgba(0,0,0,0.72)),
+    linear-gradient(
+      rgba(0,0,0,0.75),
+      rgba(0,0,0,0.45),
+      rgba(0,0,0,0.15)
+    ),
     url('reichsparteitag.jpg');
   background-size: cover;
-  background-position: center center;
+  background-position: center top;
   background-repeat: no-repeat;
-  background-attachment: fixed;
-  /* ENDE ÄNDERUNG */
-  margin:0;
-  padding:20px;
 }
+
+.hero-inner {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 40px 20px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.hero h1 {
+  color: #ffffff;
+  margin: 0 0 10px 0;
+  font-size: 2.4em;
+  line-height: 1.15;
+}
+
+.hero .subtitle {
+  color: #e6e6e6;
+  margin: 0;
+  font-size: 1.1em;
+  line-height: 1.35;
+}
+
+/* =========================================================
+   ÄNDERUNG (Hero-Update): Seiten-Innenabstand für den Content
+   ========================================================= */
+.page {
+  padding: 20px;
+}
+
 h1, h2 { color:#222; }
 .section {
   background:#ffffff;
@@ -50,7 +94,22 @@ hr { border:none; border-top:1px solid #ddd; margin:25px 0; }
 
 <body>
 
-<h1>Errichtung der NS-Diktatur in Deutschland (1933–1934)</h1>
+<!-- =======================================================
+     ÄNDERUNG (Hero-Update): Hero-Header (Titel + Untertitel)
+     ======================================================= -->
+<header class="hero">
+  <div class="hero-inner">
+    <div>
+      <h1>Errichtung der NS-Diktatur in Deutschland (1933–1934)</h1>
+      <p class="subtitle">Überblick · Machtsicherung · Gleichschaltung · Ausschaltung des Rechtsstaats</p>
+    </div>
+  </div>
+</header>
+
+<!-- =======================================================
+     ÄNDERUNG (Hero-Update): Content-Wrapper für gleichbleibenden Innenabstand
+     ======================================================= -->
+<div class="page">
 
 <div class="section">
 <h2>Materialien</h2>
@@ -72,6 +131,8 @@ Hinweis zur Korrektur: Freitext wird nicht „wortwörtlich“ geprüft, sondern
 <button onclick="submitQuiz()">Abgabe</button>
 <button onclick="resetQuiz()">Reset</button>
 <button onclick="exportPDF()">Export (PDF)</button>
+</div>
+
 </div>
 
 <script>
@@ -108,6 +169,7 @@ function groupHit(normAnswer, groupTerms) {
   return false;
 }
 
+// prüft die Gruppenlogik pro Frage
 function evaluateAnswer(i) {
   const ans = document.getElementById("answer"+i).value;
   const norm = normalizeText(ans);
@@ -124,7 +186,7 @@ function evaluateAnswer(i) {
   return { ok: missing.length === 0, missingGroups: missing };
 }
 
-// Auto-Weiter (NEU)
+// Auto-Weiter
 function goNext(i) {
   const nextIndex = i + 1;
   if (nextIndex < questions.length) {
